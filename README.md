@@ -1,4 +1,4 @@
-Codi_sed
+DESCRIPTOR d'EVENTS
 ========
 Objectiu
 L’objectiu d’aquest projecte és desenvolupar un classificador de footgrafies que sigui capaç de determinar si una imatge
