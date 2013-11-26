@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 fitxer_xml = "C:/Users/marc/Documents/GDSA/Projecte/train/metadata/xml/sed2013_task2_dataset_train.xml"
 
 llista_meta = []    # variable on guardem tots els id i els tags de totes les fotos
+                    # es una matriu [][]
 
 tree = ET.parse(fitxer_xml)
 
@@ -17,7 +18,7 @@ for foto in root:
                         
     att_foto = foto.attrib
     id_foto = att_foto["id"]    # aqui tenim el identificador de la foto
-    id_tags.append(id_foto)     # guardem en la variable global el id de la foto, que estará en la pos [0]
+    id_tags.append(id_foto)     # guardem en la variable global el id de la foto, que estarï¿½ en la pos [0]
     eti_foto = foto.getchildren()
     tags = eti_foto[1].getchildren()    # entrem en l'etiqueta tags
     print id_foto,  # comprovacio
