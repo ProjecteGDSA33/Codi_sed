@@ -1,0 +1,7 @@
+Firstly, we create a ".txt" database with Event + #tags format. After that, we can do the program train 
+using the TF-IDF by means of a function named addDocument and we create the different models. Once we 
+have done the program train, we can do now the test. For that, we insert the #tags of the new image and 
+we compare this with the different models using the similarities function provided by Github.
+
+Finally, we can evaluate the results using de F1-score (precision and recall), NMI and the divergence 
+from a random baseline.
