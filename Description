@@ -1,0 +1,5 @@
+This is a project made by 4 students from the UPC (Universitat Politècnica de Catalunya). 
+Through this project we can do a social event detection using the metadata of a large number of images. 
+Specifically, using this code images can be classified by #tags found in the metadata. 
+The result of the classification determines the event between 9 classes (concert, conference, 
+exhibition, fashion, other, protest, sports, theater_dance and no_event).
