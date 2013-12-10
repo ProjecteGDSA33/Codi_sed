@@ -1,14 +1,14 @@
-•	xml.etree.ElementTree
+•xml.etree.ElementTree
   	http://hg.python.org/cpython/file/2.7/Lib/xml/etree/ElementTree.py
-•	numpy
+•numpy
 	https://pypi.python.org/pypi/numpy
-•	pandas
+•pandas
 	http://pandas.pydata.org/
-•	scikit learn
+•scikit learn
 	http://scikit-learn.org/stable/install.html
-•	os
+•os
 	http://docs.python.org/2/library/os.html
-•	time
+•time
 	http://docs.python.org/2/library/time.html
-•	tfidf
+•tfidf
   	https://github.com/hrs/python-tf-idf/blob/master/tfidf.py
