@@ -1,5 +1,5 @@
 •	xml.etree.ElementTree
-  http://hg.python.org/cpython/file/2.7/Lib/xml/etree/ElementTree.py
+  	http://hg.python.org/cpython/file/2.7/Lib/xml/etree/ElementTree.py
 •	numpy
 	https://pypi.python.org/pypi/numpy
 •	pandas
@@ -11,4 +11,4 @@
 •	time
 	http://docs.python.org/2/library/time.html
 •	tfidf
-  https://github.com/hrs/python-tf-idf/blob/master/tfidf.py
+  	https://github.com/hrs/python-tf-idf/blob/master/tfidf.py
