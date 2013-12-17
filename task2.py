@@ -35,8 +35,6 @@ class Imatge:
   
 # directori metadades xml
 dir_xml = "C:/Users/marc/Documents/GDSA/Projecte/train/metadata/xml/sed2013_task2_dataset_train.xml"
-# directori imatges jpg
-dir_img = "C:/Users/marc/Documents/GDSA/Projecte/Imatges/class"
 # direcotri solucions csv
 dir_sol = "C:/Users/marc/Documents/GDSA/Projecte/train/annotation/sed2013_task2_dataset_train_gs.csv"
 # directori supervector
@@ -72,8 +70,6 @@ table.addDocument("non_event", non_event)        #
 
  
 nT = len(supervector)   # numero de tags totals
-
-nom_imatges = os.listdir(dir_img)
 
 sol_imatges = pnd.read_csv(dir_sol,sep='\t')
 
