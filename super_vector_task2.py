@@ -44,8 +44,8 @@ root = tree.getroot()   # l'etiqueta "arrel" es <photos> en el nostre xml
 # # # # # # # # # # # # PART NOVA # # # # # # # # # # # #
 total = range(len(root))                                #
 entrenament = random.sample(total,len(root)*70/100)     #
-classificacio = list(set(total) - set(entrenament))     #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+classificacio = list(set(total) - set(entrenament))     #  <- Important, en el fitxer task2 es classifiquen
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # #     aquests index
 
 for i in entrenament: # # # # PART NOVA
     
