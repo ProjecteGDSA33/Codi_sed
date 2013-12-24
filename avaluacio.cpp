@@ -10,7 +10,7 @@ struct EventDetection{
 };
 
 void FillVector(vector<EventDetection>& res, EventDetection& ED, ifstream& F, string& fID, string& fEv){
-    F.open("13.txt");
+    F.open("Resultats.txt");
     string linia="";
     while(!F.eof()){
         getline(F, linia);
@@ -26,7 +26,7 @@ void FillVector(vector<EventDetection>& res, EventDetection& ED, ifstream& F, st
     F.close();
 }
 
-void FillMap(map<string, string>& sols, ifstream& F, string& fID, string& fEv){
+void FillMap(map<string, string>& sols, map<string, int>& groundtruth, ifstream& F, string& fID, string& fEv){
     string linia="";
     F.open("Solucions.txt");
     while(!F.eof()){
@@ -36,6 +36,12 @@ void FillMap(map<string, string>& sols, ifstream& F, string& fID, string& fEv){
             fID=linia.substr(0, idx);
             fEv=linia.substr(idx+1, linia.size());
             sols[fID]=fEv;
+            map<string, int>::iterator i=groundtruth.find(fEv);
+            if(i!=groundtruth.end()){
+                (*i).second++;
+            } else{
+                groundtruth[fEv]=1;
+            }
         }
     }
     F.close();
@@ -105,17 +111,14 @@ float GetTotal(float ConfusionMatrix[10][10]){
     return total;
 }
 
-float Median(float Vector[10]){
+float Median(float Vector[10], const float& sizemap){
     float median=0.0;
-    float cnt=0.0;
     for(int j=1; j<10; j++){
         if(Vector[j]>0){
             median+=Vector[j];
-            //cout<<Vector[j]<<endl;
-            cnt++;
         }
     }
-    return median/cnt;
+    return median/sizemap;
 }
 
 int main(){
@@ -129,7 +132,8 @@ int main(){
 
     //Lectura fitxer solucions
     map<string, string> sols;
-    FillMap(sols, F, fID, fEv);
+    map<string, int> groundtruth;
+    FillMap(sols, groundtruth, F, fID, fEv);
 
     //Creació map auxiliar per a l'assignació de nom_event=index
     map<string, int> aux=IndexationMap();
@@ -165,32 +169,8 @@ int main(){
         accuracy+=pc[k]/total; //ja és la mitjana
 
     }
-
-    float fscore = Median(f1Score);
+    float sizemap=groundtruth.size();
+    float fscore = Median(f1Score, sizemap);
     //float Accuracy2 = Median (Accuracy); //hauria de donar el mateix que accuracy
     cout<<fscore<<' '<<accuracy<<endl;
-
-    cout<<"F1Score de no-event: "<<f1Score[4]<<endl;
-/*
-
-ofstream G;
-G.open("1.3_a.txt");
-G<<"Precision: "<<Median(Precision)<<endl;
-G<<"Recall: "<<Median(Recall)<<endl;
-G<<"f1Score: "<<Median(f1Score)<<endl;
-*/
-
-    //WriteOutput files
-    /*ofstream G, H, I, J, K;
-G.open("Precision.txt"); H.open("Recall.txt"); I.open("f1Score.txt"); J.open("Specificity.txt");
-K.open("PositiveP.txt");
-for(int n=1; n<10; n++){
-G<<Precision[n]<<endl;
-H<<Recall[n]<<endl;
-I<<f1Score[n]<<endl;
-J<<Specificity[n]<<endl;
-K<<PositiveProb<<endl;
-}
-        */
-
 }
