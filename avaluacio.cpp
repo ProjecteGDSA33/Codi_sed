@@ -10,7 +10,7 @@ struct EventDetection{
 };
 
 void FillVector(vector<EventDetection>& res, EventDetection& ED, ifstream& F, string& fID, string& fEv){
-    F.open("Resultats.txt");
+    F.open("33.txt.txt");
     string linia="";
     while(!F.eof()){
         getline(F, linia);
@@ -26,7 +26,7 @@ void FillVector(vector<EventDetection>& res, EventDetection& ED, ifstream& F, st
     F.close();
 }
 
-void FillMap(map<string, string>& sols, map<string, int>& groundtruth, ifstream& F, string& fID, string& fEv){
+void FillMap(map<string, string>& sols, ifstream& F, string& fID, string& fEv){
     string linia="";
     F.open("Solucions.txt");
     while(!F.eof()){
@@ -36,12 +36,6 @@ void FillMap(map<string, string>& sols, map<string, int>& groundtruth, ifstream&
             fID=linia.substr(0, idx);
             fEv=linia.substr(idx+1, linia.size());
             sols[fID]=fEv;
-            map<string, int>::iterator i=groundtruth.find(fEv);
-            if(i!=groundtruth.end()){
-                (*i).second++;
-            } else{
-                groundtruth[fEv]=1;
-            }
         }
     }
     F.close();
@@ -54,14 +48,25 @@ map<string, int> IndexationMap(){
     return idx;
 }
 
-void ConfusionMatrixConstruction(const vector<EventDetection>& res, map<string, string> sols, map<string, int> aux, float ConfusionMatrix[10][10]){
+map<string, int> GetGroundTruthSize(map<string, int>& groundtruth, const string& event){
+    map<string, int>::iterator mit=groundtruth.find(event);
+    if(mit!=groundtruth.end()){
+        (*mit).second++;
+    } else{
+        groundtruth[event]=1;
+    }
+    return groundtruth;
+}
+
+void ConfusionMatrixConstruction(const vector<EventDetection>& res, map<string, string> sols, map<string, int> aux, float ConfusionMatrix[10][10], map<string, int>& GroundTruth){
     for(int i=0; i<res.size(); i++){
         //cout<<res[i].ID<<' '<<res[i].event<<endl;
         map<string, string>::iterator it=sols.find(res[i].ID);
-        //cout<<(*it).first<<' '<<(*it).second<<endl;
         if(it!=sols.end()){
             map<string, int>::iterator it_res=aux.find(res[i].event);
             map<string, int>::iterator it_sols=aux.find((*it).second);
+            //cout<<(*it).second<<endl;
+            GetGroundTruthSize(GroundTruth, (*it).second);
             if(it_res!=aux.end() && it_sols!=aux.end()){
                 ConfusionMatrix[(*it_res).second][(*it_sols).second]++;
             }
@@ -112,17 +117,18 @@ float GetTotal(float ConfusionMatrix[10][10]){
 }
 
 float Median(float Vector[10], const float& sizemap){
-    float median=0.0;
+    float sum=0.0;
     for(int j=1; j<10; j++){
         if(Vector[j]>0){
-            median+=Vector[j];
+            sum+=Vector[j];
         }
     }
-    return median/sizemap;
+    return sum/sizemap;
 }
 
 int main(){
     string fID, fEv;
+
     //Lectura fitxer Resultats
     vector<EventDetection> res;
     EventDetection ED;
@@ -133,17 +139,17 @@ int main(){
     //Lectura fitxer solucions
     map<string, string> sols;
     map<string, int> groundtruth;
-    FillMap(sols, groundtruth, F, fID, fEv);
+    FillMap(sols, F, fID, fEv);
 
     //Creació map auxiliar per a l'assignació de nom_event=index
     map<string, int> aux=IndexationMap();
 
+    //Creació map de veritat terreny dels events classificats
+    map<string, int> GrdTth;
 
     //Búsqueda IDs al map de solucions
     float ConfusionMatrix[10][10]={{0}};//tot zeros
-    ConfusionMatrixConstruction(res, sols, aux, ConfusionMatrix);
-    //ShowConfusionMatrix(ConfusionMatrix);
-
+    ConfusionMatrixConstruction(res, sols, aux, ConfusionMatrix, GrdTth);
 
 
     //Extreure Precision, Recall i F1score de la matriu de confusió
@@ -167,10 +173,11 @@ int main(){
         }
         //Accuracy[k]=(pc[k]+nc[k])/total; //?????????? o bé utilitzar fórmula amb tots els paràmetres <-- per classe
         accuracy+=pc[k]/total; //ja és la mitjana
-
     }
-    float sizemap=groundtruth.size();
+    float sizemap=GrdTth.size();
     float fscore = Median(f1Score, sizemap);
+    cout<<"f1Score: "<<fscore<<endl;
+    cout<<"Accuracy: "<<accuracy*100<<'%'<<endl;
     //float Accuracy2 = Median (Accuracy); //hauria de donar el mateix que accuracy
-    cout<<fscore<<' '<<accuracy<<endl;
+    //cout<<fscore<<' '<<accuracy<<endl;
 }
